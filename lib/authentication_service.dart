@@ -8,7 +8,7 @@ class AuthenticationService with ChangeNotifier {
 
   void login(String email, String password) {
  
-    if (email == '' && password == '') {
+    if (email == 'deepak@123gmail.com' && password == '12345678') {
       _user = User(email: email, password: password);
       notifyListeners();
       // when notifylisteners it will rebuild all the widgets 
