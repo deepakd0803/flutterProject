@@ -15,13 +15,15 @@ class _LoginPageState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  var _emailError, _passwordError;
+  // var _emailError, _passwordError;
   @override
   Widget build(BuildContext context) {
+    // final authenticationService = Provider.of<AuthenticationService>(context);
     return Scaffold(
         appBar: AppBar(
           title: Text(
             "Sign In",
+            style: TextStyle(color: Colors.white),
           ),
         ),
         body: SingleChildScrollView(
@@ -33,25 +35,25 @@ class _LoginPageState extends State<Login> {
             spacing: 12,
             children: [
               Container(
-                margin: EdgeInsets.only(top: 40),
+                margin: EdgeInsets.only(top: 30),
                 child: Icon(
                   Icons.token_rounded,
                   color: Colors.blue,
-                  size: 50,
+                  size: 80,
                 ),
               ),
               SizedBox(
                 height: 5,
               ),
               Container(
-                alignment: Alignment.topLeft,
-                margin: EdgeInsets.only(left: 30),
+                alignment: Alignment.center,
+                margin: EdgeInsets.symmetric(vertical: 12),
                 child: Text(
                   "Create your Account",
                   style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.normal,
-                      fontSize: 16),
+                      color: Colors.blue,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20),
                 ),
               ),
               Container(
@@ -68,20 +70,19 @@ class _LoginPageState extends State<Login> {
                     ]),
                 child: TextFormField(
                   controller: _emailController,
+                  onChanged: (value) => context
+                      .read<AuthenticationService>()
+                      .validateEmail(value),
                   decoration: InputDecoration(
                       labelText: "Email",
                       border: InputBorder.none,
-                      errorText: _emailError),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Email is required';
-                    } else if (!RegExp(
-                            r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
-                        .hasMatch(value)) {
-                      return 'Invalid email format';
-                    }
-                    return null;
-                  },
+                      errorText: context
+                              .watch<AuthenticationService>()
+                              .emailError
+                              .isNotEmpty
+                          ? context.watch<AuthenticationService>().emailError
+                          : null),
+
                   keyboardType: TextInputType.emailAddress,
                   // onChanged: (text) => print("on change $text"),
                   // onSubmitted: (value) => print("final value is $value"),
@@ -101,50 +102,75 @@ class _LoginPageState extends State<Login> {
                     ]),
                 child: TextFormField(
                   controller: _passwordController,
+                  onChanged: (value) => context
+                      .read<AuthenticationService>()
+                      .validatePassword(value),
                   decoration: InputDecoration(
-                      errorText: _passwordError,
+                      errorText: context
+                              .watch<AuthenticationService>()
+                              .passwordError
+                              .isNotEmpty
+                          ? context.watch<AuthenticationService>().passwordError
+                          : null,
                       labelText: "Password",
                       border: InputBorder.none),
                   obscureText: true,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Password is required';
-                    } else if (value.length < 8) {
-                      return 'Password must be at least 8 characters long';
-                    }
-                    return null;
-                  },
                   keyboardType: TextInputType.visiblePassword,
                   // onChanged: (text) => print("on change $text"),
                   // onSubmitted: (value) => print("final value is $value"),
                 ),
               ),
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    context.read<AuthenticationService>().login(
-                          _emailController.text,
-                          _passwordController.text,
-                        );
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => HomeScreen()));
-                  }
-                },
-                child: Text(
-                  "Sign in",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 17),
-                ),
-                style: ElevatedButton.styleFrom(
-                  elevation: 5,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(7)),
-                  backgroundColor: Colors.blue,
-                  textStyle:
-                      TextStyle(color: const Color.fromARGB(255, 191, 32, 32)),
-                  minimumSize: Size(320, 50),
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 6),
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (context.read<AuthenticationService>().validateEmail(
+                              _emailController.text,
+                            ) &&
+                        context.read<AuthenticationService>().validatePassword(
+                              _passwordController.text,
+                            )) {
+                      context.read<AuthenticationService>().login(
+                            _emailController.text,
+                            _passwordController.text,
+                          );
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => HomeScreen()));
+                    }
+                    // } else {
+                    //   // Show error messages
+                    //   ScaffoldMessenger.of(context).showSnackBar(
+                    //     SnackBar(
+                    //       content: Text(context
+                    //               .read<AuthenticationService>()
+                    //               .emailError
+                    //               .isNotEmpty
+                    //           ? context.read<AuthenticationService>().emailError
+                    //           : context
+                    //               .read<AuthenticationService>()
+                    //               .passwordError),
+                    //     ),
+                    //   );
+                    // }
+                  },
+                  child: Text(
+                    "Sign in",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 17),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    elevation: 5,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(7)),
+                    backgroundColor: Colors.blue,
+                    textStyle: TextStyle(
+                        color: const Color.fromARGB(255, 191, 32, 32)),
+                    minimumSize: Size(320, 50),
+                  ),
                 ),
               ),
               SizedBox(
@@ -170,7 +196,10 @@ class _LoginPageState extends State<Login> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(
-                      child: Text("Don't have any Account ?"),
+                      child: Text(
+                        "Don't have any Account ?",
+                        style: TextStyle(color: Colors.black),
+                      ),
                     ),
                     TextButton(
                         onPressed: () => Navigator.push(

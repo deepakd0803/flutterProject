@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/apidatafatch.dart';
+import 'package:flutter_app/apiprovider.dart';
 import 'package:flutter_app/authentication_service.dart';
-import 'package:flutter_app/home.dart';
+// import 'package:flutter_app/demo.dart';
 import 'package:flutter_app/splash_screen.dart';
+// import 'package:flutter_app/todo_provider.dart';
 import 'package:provider/provider.dart';
 
 // Provider is a widget that provides a value or a service to its descendants.
@@ -11,6 +14,10 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthenticationService()),
+        ChangeNotifierProvider(
+          create: (_) => Apiprovider(),
+        ),
+        // ChangeNotifierProvider(create: (_) => TodoProvider()),
         // ChangeNotifierProvider(create: (_) => HomeScreen()),
       ],
       child: MainApp(),
@@ -47,7 +54,7 @@ class _MyHomeScreen extends State<FavoriteWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SplashScreen(),
+      body: Apidatafatch(),
     );
   }
 }

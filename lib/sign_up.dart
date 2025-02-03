@@ -5,13 +5,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'authentication_service.dart';
 
-// class SignUpData {
-//   String email;
-//   String Password;
-//   String name;
-//   SignUpData({required this.email, required this.Password, required this.name});
-// }
-
 class SignUp extends StatefulWidget {
   @override
   _SignUpState createState() => _SignUpState();
@@ -22,9 +15,10 @@ class _SignUpState extends State<SignUp> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _nameController = TextEditingController();
-  var _nameError, _emailError, _passwordError;
+  // var _nameError, _emailError, _passwordError;
   @override
   Widget build(BuildContext context) {
+    // final authenticationService = Provider.of<AuthenticationService>(context);
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -82,16 +76,17 @@ class _SignUpState extends State<SignUp> {
                     ]),
                 child: TextFormField(
                   controller: _nameController,
+                  onChanged: (value) =>
+                      context.read<AuthenticationService>().validateName(value),
                   decoration: InputDecoration(
-                      errorText: _nameError,
+                      errorText: context
+                              .watch<AuthenticationService>()
+                              .nameError
+                              .isNotEmpty
+                          ? context.watch<AuthenticationService>().nameError
+                          : null,
                       labelText: "Name",
                       border: InputBorder.none),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "Name is required";
-                    }
-                    return null;
-                  },
                   keyboardType: TextInputType.emailAddress,
                 ),
               ),
@@ -109,20 +104,18 @@ class _SignUpState extends State<SignUp> {
                     ]),
                 child: TextFormField(
                   controller: _emailController,
+                  onChanged: (value) => context
+                      .read<AuthenticationService>()
+                      .validateEmail(value),
                   decoration: InputDecoration(
-                      errorText: _emailError,
+                      errorText: context
+                              .watch<AuthenticationService>()
+                              .emailError
+                              .isNotEmpty
+                          ? context.watch<AuthenticationService>().emailError
+                          : null,
                       labelText: "Email",
                       border: InputBorder.none),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Email is required';
-                    } else if (!RegExp(
-                            r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
-                        .hasMatch(value)) {
-                      return 'Invalid email format';
-                    }
-                    return null;
-                  },
                   keyboardType: TextInputType.emailAddress,
                 ),
               ),
@@ -140,19 +133,19 @@ class _SignUpState extends State<SignUp> {
                     ]),
                 child: TextFormField(
                   controller: _passwordController,
+                  onChanged: (value) => context
+                      .read<AuthenticationService>()
+                      .validatePassword(value),
                   decoration: InputDecoration(
-                      errorText: _passwordError,
+                      errorText: context
+                              .watch<AuthenticationService>()
+                              .passwordError
+                              .isNotEmpty
+                          ? context.watch<AuthenticationService>().passwordError
+                          : null,
                       labelText: "Password",
                       border: InputBorder.none),
                   obscureText: true,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Password is required';
-                    } else if (value.length < 8) {
-                      return 'Password must be at least 8 characters long';
-                    }
-                    return null;
-                  },
                   keyboardType: TextInputType.visiblePassword,
                 ),
               ),
@@ -177,20 +170,41 @@ class _SignUpState extends State<SignUp> {
               // ),
               ElevatedButton(
                 onPressed: () {
-                  if (_formKey.currentState!.validate()) {
+                  if (context.read<AuthenticationService>().validateEmail(
+                            _emailController.text,
+                          ) &&
+                      context.read<AuthenticationService>().validatePassword(
+                            _passwordController.text,
+                          ) &&
+                      context.read<AuthenticationService>().validateName(
+                            _nameController.text,
+                          )) {
                     context.read<AuthenticationService>().signUp(
                           _nameController.text,
                           _emailController.text,
                           _passwordController.text,
                         );
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => HomeScreen()),
-                    );
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => HomeScreen()));
                   }
+                  // } else {
+                  //   // Show error messages
+                  //   ScaffoldMessenger.of(context).showSnackBar(
+                  //     SnackBar(
+                  //       content: Text(context
+                  //               .read<AuthenticationService>()
+                  //               .emailError
+                  //               .isNotEmpty
+                  //           ? context.read<AuthenticationService>().emailError
+                  //           : context
+                  //               .read<AuthenticationService>()
+                  //               .passwordError),
+                  //     ),
+                  //   );
+                  // }
                 },
                 child: Text(
-                  "Sign Up",
+                  "Sign in",
                   style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -206,6 +220,7 @@ class _SignUpState extends State<SignUp> {
                   minimumSize: Size(320, 50),
                 ),
               ),
+
               SizedBox(
                 child: Text(
                   "- Or sign up with -",

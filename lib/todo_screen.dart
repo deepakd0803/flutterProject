@@ -148,72 +148,80 @@ class _TodoScreenState extends State<TodoScreen> {
                       itemCount: todos.length,
                       itemBuilder: (context, index) {
                         final todo = todos[index];
+                        // print(todo['id']);
+                        // print(todo['completed']);
+                        // print(todo['title']);
                         //Todo Card displaying th data fetched from API
-                        return Card(
-                          color: todo['completed']
-                              ? Colors.grey.shade300
-                              : Colors.grey.shade500,
-                          margin: EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Checkbox(
-                                          value: todo['completed'],
-                                          activeColor: Color(0xFF183685),
-                                          onChanged: (bool? value) {
-                                            setState(() {
-                                              todos[index]['completed'] = value;
-                                            });
-                                          }),
-                                      Text(
-                                        "ID: ${todo['id']}",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                            color: Colors.black),
-                                      ),
-                                    ],
-                                  ),
-                                  Spacer(),
-                                  Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      //Edit Icon
-                                      IconButton(
-                                        onPressed: () =>
-                                            {showEditDialog(context, index)},
-                                        icon: Icon(Icons.edit),
-                                        color: Colors.black,
-                                      ),
+                        return InkWell(
+                          onTap: () => print("click on $index"),
+                          child: Card(
+                            color: todo['completed']
+                                ? Colors.grey.shade300
+                                : Colors.grey.shade500,
+                            margin: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Checkbox(
+                                            value: todo['completed'],
+                                            activeColor: Color(0xFF183685),
+                                            onChanged: (bool? value) {
+                                              setState(() {
+                                                todos[index]['completed'] =
+                                                    value;
+                                              });
+                                            }),
+                                        Text(
+                                          "ID: ${todo['id']}",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16,
+                                              color: Colors.black),
+                                        ),
+                                      ],
+                                    ),
+                                    Spacer(),
+                                    Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        //Edit Icon
+                                        IconButton(
+                                          onPressed: () =>
+                                              {showEditDialog(context, index)},
+                                          icon: Icon(Icons.edit),
+                                          color: Colors.black,
+                                        ),
 
-                                      //Delete Button
-                                      IconButton(
-                                        onPressed: () =>
-                                            {deleteTodo(context, index)},
-                                        icon: Icon(Icons.delete),
-                                        color: Colors.red,
-                                      )
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 2),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8),
-                                child: Text(
-                                  "Title: ${todo['title']}",
+                                        //Delete Button
+                                        IconButton(
+                                          onPressed: () =>
+                                              {deleteTodo(context, index)},
+                                          icon: Icon(Icons.delete),
+                                          color: Colors.red,
+                                        )
+                                      ],
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
+                                SizedBox(height: 2),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 8),
+                                  child: Text(
+                                    "Title: ${todo['title']}",
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         );
                       },

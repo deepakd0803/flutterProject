@@ -120,42 +120,45 @@ class HomeScreenState extends State<TodoList> {
         backgroundColor: Color(0xFF183685),
         foregroundColor: Colors.white,
       ),
+
       body: Padding(
         padding: EdgeInsets.all(12.0),
         child: Column(
-          spacing: 12,
+          spacing: 20,
           children: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => TodoScreen()));
-              },
-              child: Text(
-                "TodoList",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 17),
-              ),
-              style: ElevatedButton.styleFrom(
-                elevation: 5,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12)),
-                backgroundColor: Colors.blue,
-                textStyle:
-                    TextStyle(color: const Color.fromARGB(255, 191, 32, 32)),
-                minimumSize: Size(320, 50),
+            Container(
+              margin: EdgeInsets.only(top: 25),
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => TodoScreen()));
+                },
+                child: Text(
+                  "List Item",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18),
+                ),
+                style: ElevatedButton.styleFrom(
+                  elevation: 5,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15)),
+                  backgroundColor: Colors.blue,
+                  textStyle:
+                      TextStyle(color: const Color.fromARGB(255, 191, 32, 32)),
+                  minimumSize: Size(320, 60),
+                ),
               ),
             ),
             //Welcome User message
-
             SizedBox(height: 30),
             Expanded(
               child: todos.isEmpty
                   ? Center(
                       child: Text(
-                        'No todos yet.Add one using the add button!',
-                        style: TextStyle(fontSize: 16),
+                        'No todos yet.Add todos using the add button!',
+                        style: TextStyle(fontSize: 18, color: Colors.black),
                       ),
                     )
                   : ListView.builder(

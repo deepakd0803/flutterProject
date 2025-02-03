@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/login.dart';
 
+
 class SplashScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _SplashScreenState();
@@ -32,7 +33,7 @@ class _SplashScreenState extends State<SplashScreen> {
             child: Icon(
           Icons.token_rounded,
           color: Colors.white,
-          size: 90,
+          size: 120,
         )),
       ),
     );

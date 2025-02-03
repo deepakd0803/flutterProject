@@ -8,6 +8,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = context.watch<AuthenticationService>().user;
+    ;
 
     return Scaffold(
       appBar: AppBar(
@@ -20,8 +21,16 @@ class HomeScreen extends StatelessWidget {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          spacing: 18,
+          spacing: 28,
           children: [
+            Container(
+              margin: EdgeInsets.only(top: 20),
+              child: Icon(
+                Icons.token_rounded,
+                color: Colors.blue,
+                size: 80,
+              ),
+            ),
             Text(
               'Welcome, ${user.name}! ',
               style: TextStyle(
