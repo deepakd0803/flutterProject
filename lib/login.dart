@@ -2,8 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/home.dart';
 import 'package:flutter_app/sign_up.dart';
+import 'package:flutter_app/splash_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'authentication_service.dart';
 
 class Login extends StatefulWidget {
@@ -123,7 +125,7 @@ class _LoginPageState extends State<Login> {
               Container(
                 margin: EdgeInsets.symmetric(vertical: 6),
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (context.read<AuthenticationService>().validateEmail(
                               _emailController.text,
                             ) &&
@@ -134,6 +136,8 @@ class _LoginPageState extends State<Login> {
                             _emailController.text,
                             _passwordController.text,
                           );
+                      var sharedPref = await SharedPreferences.getInstance();
+                      sharedPref.setBool(SplashScreenState.KEYLOGIN, true);
                       Navigator.push(
                           context,
                           MaterialPageRoute(

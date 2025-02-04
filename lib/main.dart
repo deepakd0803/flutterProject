@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/apidatafatch.dart';
 import 'package:flutter_app/apiprovider.dart';
 import 'package:flutter_app/authentication_service.dart';
-// import 'package:flutter_app/demo.dart';
 import 'package:flutter_app/splash_screen.dart';
+// import 'package:flutter_app/demo.dart';
+// import 'package:flutter_app/splash_screen.dart';
 // import 'package:flutter_app/todo_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -54,7 +55,7 @@ class _MyHomeScreen extends State<FavoriteWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Apidatafatch(),
+      body: SplashScreen(),
     );
   }
 }
